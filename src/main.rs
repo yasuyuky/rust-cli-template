@@ -60,7 +60,7 @@ fn main() -> Result<()> {
     }
     match opt.cmd {
         Command::Do { something } => unimplemented!("{}", something),
-        Command::Version => println!("{}", VERSION_INFO),
+        Command::Version => tracing::info!("{}", VERSION_INFO),
         Command::Completion { shell } => {
             let shell = match shell {
                 Shell::Bash => shells::Shell::Bash,
