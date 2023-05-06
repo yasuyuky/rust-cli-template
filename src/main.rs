@@ -3,6 +3,10 @@ use clap::{CommandFactory, Parser};
 use clap_complete::{generate, shells};
 
 const BIN_NAME: &str = include_str!(concat!(env!("OUT_DIR"), "/bin-name.txt"));
+const VERSION_INFO: &str = concat!(
+    env!("CARGO_PKG_VERSION"),
+    include_str!(concat!(env!("OUT_DIR"), "/commit-info.txt"))
+);
 
 #[derive(Parser)]
 struct Opt {
@@ -58,13 +62,7 @@ fn main() -> Result<()> {
     match command {
         Command::Do { something } => unimplemented!("{}", something),
         Command::Version => {
-            println!(
-                "{}",
-                concat!(
-                    env!("CARGO_PKG_VERSION"),
-                    include_str!(concat!(env!("OUT_DIR"), "/commit-info.txt"))
-                )
-            );
+            println!("{}", VERSION_INFO);
         }
         Command::Completion { shell } => {
             let shell = match shell {
