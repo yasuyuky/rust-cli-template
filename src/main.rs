@@ -52,6 +52,16 @@ fn init_tracing() {
     tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 }
 
+fn shell_to_clap_shell(shell: Shell) -> shells::Shell {
+    match shell {
+        Shell::Bash => shells::Shell::Bash,
+        Shell::Fish => shells::Shell::Fish,
+        Shell::Zsh => shells::Shell::Zsh,
+        Shell::PowerShell => shells::Shell::PowerShell,
+        Shell::Elvish => shells::Shell::Elvish,
+    }
+}
+
 fn main() -> Result<()> {
     init_tracing();
     let opt = Opt::parse();
@@ -62,15 +72,9 @@ fn main() -> Result<()> {
         Command::Do { something } => unimplemented!("{}", something),
         Command::Version => tracing::info!("{}", VERSION_INFO),
         Command::Completion { shell } => {
-            let shell = match shell {
-                Shell::Bash => shells::Shell::Bash,
-                Shell::Fish => shells::Shell::Fish,
-                Shell::Zsh => shells::Shell::Zsh,
-                Shell::PowerShell => shells::Shell::PowerShell,
-                Shell::Elvish => shells::Shell::Elvish,
-            };
+            let clap_shell = shell_to_clap_shell(shell);
             let mut cmd = Opt::command();
-            generate(shell, &mut cmd, BIN_NAME, &mut std::io::stdout());
+            generate(clap_shell, &mut cmd, BIN_NAME, &mut std::io::stdout());
         }
     }
     Ok(())
