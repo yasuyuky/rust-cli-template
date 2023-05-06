@@ -19,12 +19,12 @@ struct Opt {
 #[derive(Debug, Parser)]
 #[clap(rename_all = "kebab-case")]
 enum Command {
-    /// Copy
+    /// Do something
     #[clap(alias = "d")]
     Do { something: String },
-    /// Version
+    /// Print version information
     Version,
-    /// Completion
+    /// Generate shell completion scripts
     Completion {
         #[clap(subcommand)]
         shell: Shell,
