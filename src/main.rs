@@ -2,6 +2,8 @@ use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use clap_complete::{generate, shells};
 
+mod logs;
+
 const BIN_NAME: &str = include_str!(concat!(env!("OUT_DIR"), "/bin-name.txt"));
 const VERSION_INFO: &str = concat!(
     env!("CARGO_PKG_VERSION"),
@@ -42,16 +44,6 @@ enum Shell {
     Elvish,
 }
 
-fn init_tracing() {
-    let subscriber = tracing_subscriber::fmt()
-        .without_time()
-        .with_max_level(tracing::Level::INFO)
-        .with_level(false)
-        .with_target(false)
-        .finish();
-    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
-}
-
 fn shell_to_clap_shell(shell: Shell) -> shells::Shell {
     match shell {
         Shell::Bash => shells::Shell::Bash,
@@ -63,7 +55,7 @@ fn shell_to_clap_shell(shell: Shell) -> shells::Shell {
 }
 
 fn main() -> Result<()> {
-    init_tracing();
+    logs::init_tracing();
     let opt = Opt::parse();
     if opt.color {
         std::env::set_var("CLICOLOR_FORCE", "1");
