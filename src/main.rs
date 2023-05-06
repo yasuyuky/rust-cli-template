@@ -55,11 +55,10 @@ fn init_tracing() {
 fn main() -> Result<()> {
     init_tracing();
     let opt = Opt::parse();
-    let command = opt.cmd;
     if opt.color {
         std::env::set_var("CLICOLOR_FORCE", "1");
     }
-    match command {
+    match opt.cmd {
         Command::Do { something } => unimplemented!("{}", something),
         Command::Version => println!("{}", VERSION_INFO),
         Command::Completion { shell } => {
