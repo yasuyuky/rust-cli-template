@@ -38,7 +38,9 @@ fn main() -> Result<()> {
     logs::init_tracing();
     let opt = Opt::parse();
     if opt.color {
+        unsafe {
         std::env::set_var("CLICOLOR_FORCE", "1");
+        }
     }
     match opt.cmd {
         Command::Do { something } => unimplemented!("{}", something),
